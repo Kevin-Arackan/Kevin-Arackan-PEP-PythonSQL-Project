@@ -44,18 +44,50 @@ def main():
 
 
 # TODO: Implement the following 4 functions. The functions must pass the unit tests to complete the project.
+def clean_data(file_path):
+    """
+    Takes in a file path.
+    Cleans data.
+    Returns a argument list arg_list that only contains clean data.
+    """
+    arg_list = []
+    with open(file_path, "r") as file:
+        line = file.readline().strip()
+        param_num = len(line.split(","))
+        line = file.readline()
+        while line != "":
+            line = line.strip()
+            args = line.split(",")
+            if len(args) == param_num and "" not in args:
+                arg_list.append(tuple(args))
+            line = file.readline()
+    return arg_list
 
 
 # This function will load the users.csv file into the users table, discarding any records with incomplete data
 def load_and_clean_users(file_path):
-
-    print("TODO: load_users")
+    input_data = clean_data(file_path)
+    print(input_data)
+    query = """
+    INSERT INTO users (firstName, lastName)
+    VALUES (?, ?)
+    """
+    for values in input_data:
+        cursor.execute(query, values)
+    conn.commit()
 
 
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
-
-    print("TODO: load_call_logs")
+    input_data = clean_data(file_path)
+    print(input_data)
+    query = """
+    INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, userId)
+    VALUES (?, ?, ?, ?, ?)
+    """
+    for values in input_data:
+        cursor.execute(query, values)
+    conn.commit()
 
 
 # This function will write analytics data to testUserAnalytics.csv - average call time, and number of calls per user.

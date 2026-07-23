@@ -44,7 +44,7 @@ def main():
 
 
 # TODO: Implement the following 4 functions. The functions must pass the unit tests to complete the project.
-def clean_data(file_path):
+def _clean_data(file_path):
     """
     Takes in a file path.
     Cleans data.
@@ -66,7 +66,7 @@ def clean_data(file_path):
 
 # This function will load the users.csv file into the users table, discarding any records with incomplete data
 def load_and_clean_users(file_path):
-    input_data = clean_data(file_path)
+    input_data = _clean_data(file_path)
     print(input_data)
     query = """
     INSERT INTO users (firstName, lastName)
@@ -79,7 +79,7 @@ def load_and_clean_users(file_path):
 
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
-    input_data = clean_data(file_path)
+    input_data = _clean_data(file_path)
     print(input_data)
     query = """
     INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, userId)

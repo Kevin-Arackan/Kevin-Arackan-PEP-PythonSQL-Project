@@ -103,6 +103,8 @@ def write_user_analytics(csv_file_path):
     LEFT JOIN callLogs
     ON users.userId = callLogs.userId
     GROUP BY users.userId;"""
+    cursor.execute(query)
+    print(cursor.fetchone())
 
     print("TODO: write_user_analytics")
 
@@ -110,6 +112,13 @@ def write_user_analytics(csv_file_path):
 # This function will write the callLogs ordered by userId, then start time.
 # Then, write the ordered callLogs to orderedCalls.csv
 def write_ordered_calls(csv_file_path):
+    query = """
+        SELECT callId, phoneNumber, startTime, endTime, direction, userId
+        FROM callLogs
+        ORDER BY userId, startTime;
+    """
+    cursor.execute(query)
+    print(cursor.fetchone())
 
     print("TODO: write_ordered_calls")
 

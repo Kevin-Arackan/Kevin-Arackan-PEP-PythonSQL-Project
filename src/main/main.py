@@ -90,6 +90,22 @@ def load_and_clean_call_logs(file_path):
     conn.commit()
 
 
+def _write_data(file_path, title, output_data):
+    """
+    Takes in a file path and an iterable.
+    Writes all output data specified by the iterable to the output file specified in the file path.
+    """
+    with open(file_path, "w") as file:
+        file.write(f"{title}\n")
+        for record in output_data:
+            output_string = ""
+            for i in range(len(record) - 1):
+                output_string += f"{record[i]},"
+            output_string += str(record[-1])
+            file.write(f"{output_string}\n")
+    return None
+
+
 # This function will write analytics data to testUserAnalytics.csv - average call time, and number of calls per user.
 # You must save records consisting of each userId, avgDuration, and numCalls
 # example: 1,105.0,4 - where 1 is the userId, 105.0 is the avgDuration, and 4 is the numCalls.
@@ -106,7 +122,8 @@ def write_user_analytics(csv_file_path):
     """
     cursor.execute(query)
     output_data = cursor.fetchall()
-    _write_data(csv_file_path, output_data)
+    title = "userId,avgDuration,numCalls"
+    _write_data(csv_file_path, title, output_data)
 
 
 # This function will write the callLogs ordered by userId, then start time.
@@ -119,21 +136,8 @@ def write_ordered_calls(csv_file_path):
     """
     cursor.execute(query)
     output_data = cursor.fetchall()
-    _write_data(csv_file_path, output_data)
-
-def _write_data(file_path, output_data):
-    """
-    Takes in a file path and an iterable.
-    Writes all output data specified by the iterable to the output file specified in the file path.
-    """
-    with open(file_path, "a") as file:
-        for record in output_data:
-            output_string = ""
-            for i in range(len(record) - 1):
-                output_string += f"{record[i]},"
-            output_string += str(record[-1])
-            file.write(f"{output_string}\n")
-    return None
+    title = "callId,phoneNumber,startTime,endTime,direction,userId"
+    _write_data(csv_file_path, title, output_data)
 
 
 

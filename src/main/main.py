@@ -67,7 +67,7 @@ def _clean_data(file_path):
 # This function will load the users.csv file into the users table, discarding any records with incomplete data
 def load_and_clean_users(file_path):
     input_data = _clean_data(file_path)
-    print(input_data)
+    print(f"{input_data}\n")
     query = """
     INSERT INTO users (firstName, lastName)
     VALUES (?, ?);
@@ -80,7 +80,7 @@ def load_and_clean_users(file_path):
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
     input_data = _clean_data(file_path)
-    print(input_data)
+    print(f"{input_data}\n")
     query = """
     INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, userId)
     VALUES (?, ?, ?, ?, ?);
@@ -102,9 +102,10 @@ def write_user_analytics(csv_file_path):
     FROM users
     LEFT JOIN callLogs
     ON users.userId = callLogs.userId
-    GROUP BY users.userId;"""
+    GROUP BY users.userId;
+    """
     cursor.execute(query)
-    print(cursor.fetchone())
+    print(cursor.fetchall())
 
     print("TODO: write_user_analytics")
 
@@ -113,12 +114,12 @@ def write_user_analytics(csv_file_path):
 # Then, write the ordered callLogs to orderedCalls.csv
 def write_ordered_calls(csv_file_path):
     query = """
-        SELECT callId, phoneNumber, startTime, endTime, direction, userId
-        FROM callLogs
-        ORDER BY userId, startTime;
+    SELECT callId, phoneNumber, startTime, endTime, direction, userId
+    FROM callLogs
+    ORDER BY userId, startTime;
     """
     cursor.execute(query)
-    print(cursor.fetchone())
+    print(cursor.fetchall())
 
     print("TODO: write_ordered_calls")
 

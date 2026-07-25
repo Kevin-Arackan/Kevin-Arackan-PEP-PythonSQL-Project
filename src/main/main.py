@@ -105,9 +105,8 @@ def write_user_analytics(csv_file_path):
     GROUP BY users.userId;
     """
     cursor.execute(query)
-    print(cursor.fetchall())
-
-    print("TODO: write_user_analytics")
+    output_data = cursor.fetchall()
+    _write_data(csv_file_path, output_data)
 
 
 # This function will write the callLogs ordered by userId, then start time.
@@ -119,9 +118,22 @@ def write_ordered_calls(csv_file_path):
     ORDER BY userId, startTime;
     """
     cursor.execute(query)
-    print(cursor.fetchall())
+    output_data = cursor.fetchall()
+    _write_data(csv_file_path, output_data)
 
-    print("TODO: write_ordered_calls")
+def _write_data(file_path, output_data):
+    """
+    Takes in a file path and an iterable.
+    Writes all output data specified by the iterable to the output file specified in the file path.
+    """
+    with open(file_path, "a") as file:
+        for record in output_data:
+            output_string = ""
+            for i in range(len(record) - 1):
+                output_string += f"{record[i]},"
+            output_string += str(record[-1])
+            file.write(f"{output_string}\n")
+    return None
 
 
 

@@ -70,7 +70,7 @@ def load_and_clean_users(file_path):
     print(input_data)
     query = """
     INSERT INTO users (firstName, lastName)
-    VALUES (?, ?)
+    VALUES (?, ?);
     """
     for values in input_data:
         cursor.execute(query, values)
@@ -83,7 +83,7 @@ def load_and_clean_call_logs(file_path):
     print(input_data)
     query = """
     INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, userId)
-    VALUES (?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?);
     """
     for values in input_data:
         cursor.execute(query, values)
@@ -94,6 +94,15 @@ def load_and_clean_call_logs(file_path):
 # You must save records consisting of each userId, avgDuration, and numCalls
 # example: 1,105.0,4 - where 1 is the userId, 105.0 is the avgDuration, and 4 is the numCalls.
 def write_user_analytics(csv_file_path):
+
+    query = """
+    SELECT users.userId,
+    AVG(endTime - startTime) AS average_call_time,
+    COUNT(callLogs.userId) as num_of_calls
+    FROM users
+    LEFT JOIN callLogs
+    ON users.userId = callLogs.userId
+    GROUP BY users.userId;"""
 
     print("TODO: write_user_analytics")
 

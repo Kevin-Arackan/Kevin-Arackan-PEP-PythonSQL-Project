@@ -113,9 +113,9 @@ def _write_data(file_path, title, output_data):
 def write_user_analytics(csv_file_path):
 
     query = """
-    SELECT userId, AVG(endTime - startTime) AS average_call_time, COUNT(userId) as num_of_calls
+    SELECT userId, AVG(endTime - startTime) AS average_call_time, COUNT(*) as num_of_calls
     FROM callLogs
-    GROUP BY users.userId;
+    GROUP BY userId;
     """
     cursor.execute(query)
     output_data = cursor.fetchall()

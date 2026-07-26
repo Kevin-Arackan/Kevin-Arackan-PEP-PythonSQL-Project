@@ -102,6 +102,7 @@ def _write_data(file_path, title, output_data):
             for i in range(len(record) - 1):
                 output_string += f"{record[i]},"
             output_string += str(record[-1])
+            print(output_string)
             file.write(f"{output_string}\n")
     return None
 
@@ -120,8 +121,6 @@ def write_user_analytics(csv_file_path):
     """
     cursor.execute(query)
     output_data = cursor.fetchall()
-    for line in output_data:
-        print(line)
     title = "userId,avgDuration,numCalls"
     _write_data(csv_file_path, title, output_data)
 

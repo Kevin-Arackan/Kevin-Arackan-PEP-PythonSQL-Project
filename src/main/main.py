@@ -1,5 +1,6 @@
 import csv
 import sqlite3
+import os
 
 # Connect to the SQLite in-memory database
 conn = sqlite3.connect(':memory:')
@@ -95,7 +96,11 @@ def _write_data(file_path, title, output_data):
     Takes in a file path and an iterable.
     Writes all output data specified by the iterable to the output file specified in the file path.
     """
-    with open(file_path, "w") as file:
+    print(os.path.abspath(file_path))
+    with open(file_path, "r") as file:
+        print("FILE CONTENTS:")
+        print(file.read())
+    with open(file_path, "a") as file:
         file.write(f"{title}\n")
         for record in output_data:
             output_string = ""

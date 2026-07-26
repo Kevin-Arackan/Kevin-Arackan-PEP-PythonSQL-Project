@@ -1,6 +1,5 @@
 import csv
 import sqlite3
-import os
 
 # Connect to the SQLite in-memory database
 conn = sqlite3.connect(':memory:')
@@ -96,11 +95,7 @@ def _write_data(file_path, title, output_data):
     Takes in a file path and an iterable.
     Writes all output data specified by the iterable to the output file specified in the file path.
     """
-    print(os.path.abspath(file_path))
-    with open(file_path, "r") as file:
-        print("FILE CONTENTS:")
-        print(file.read())
-    with open(file_path, "a") as file:
+    with open(file_path, "w") as file:
         file.write(f"{title}\n")
         for record in output_data:
             output_string = ""
@@ -118,32 +113,12 @@ def _write_data(file_path, title, output_data):
 def write_user_analytics(csv_file_path):
 
     query = """
-    SELECT users.userId, AVG(endTime - startTime) AS average_call_time, COUNT(callLogs.userId) as num_of_calls
-    FROM users
-    LEFT JOIN callLogs
-    ON users.userId = callLogs.userId
-    GROUP BY users.userId;
-    """
-    avg_query = """
-    SELECT users.userId, AVG(endTime - startTime) AS average_call_time
-    FROM users
-    LEFT JOIN callLogs
-    ON users.userId = callLogs.userId
-    GROUP BY users.userId;
-    """
-    count_query = """
-    SELECT users.userId, COUNT(callLogs.userId) as num_of_calls
-    FROM users
-    LEFT JOIN callLogs
-    ON users.userId = callLogs.userId
+    SELECT userId, AVG(endTime - startTime) AS average_call_time, COUNT(userId) as num_of_calls
+    FROM callLogs
     GROUP BY users.userId;
     """
     cursor.execute(query)
     output_data = cursor.fetchall()
-    cursor.execute(avg_query)
-    print(cursor.fetchall())
-    cursor.execute(count_query)
-    print(cursor.fetchall())
     title = "userId,avgDuration,numCalls"
     _write_data(csv_file_path, title, output_data)
 

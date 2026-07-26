@@ -112,7 +112,7 @@ def _write_data(file_path, title, output_data):
 def write_user_analytics(csv_file_path):
 
     query = """
-    SELECT users.userId, AVG(endTime - startTime) AS average_call_time, COUNT(callLogs.userId) as num_of_calls
+    SELECT users.userId, COALESCE(AVG(endTime - startTime), 0) AS average_call_time, COUNT(callLogs.userId) as num_of_calls
     FROM users
     LEFT JOIN callLogs
     ON users.userId = callLogs.userId
@@ -120,6 +120,8 @@ def write_user_analytics(csv_file_path):
     """
     cursor.execute(query)
     output_data = cursor.fetchall()
+    for line in output_data:
+        print(line)
     title = "userId,avgDuration,numCalls"
     _write_data(csv_file_path, title, output_data)
 
